@@ -19,17 +19,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping
-    public User add(@RequestBody User user){
-        return userService.save(user);
-    }
 
     @GetMapping()
     public List<User> findAll(){
         return userService.getAll();
     }
 
-    @GetMapping("/id/{userId}")
+    @GetMapping("/{userId}")
     public User findById(@PathVariable int userId){
         return userService.getUserById(userId);
     }
@@ -37,6 +33,11 @@ public class UserController {
     @GetMapping("/username/{userName}")
     public User findByName(@PathVariable String userName){
         return userService.getUserByName(userName);
+    }
+
+    @PostMapping
+    public User add(@RequestBody User user){
+        return userService.save(user);
     }
 
     @PutMapping("/update")
