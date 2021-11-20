@@ -19,7 +19,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
     @GetMapping()
     public List<User> findAll(){
         return userService.getAll();
@@ -40,7 +39,7 @@ public class UserController {
         return userService.save(user);
     }
 
-    @PutMapping("/update")
+    @PutMapping()
     public User update(@RequestBody User user){
         return userService.updateUser(user);
     }

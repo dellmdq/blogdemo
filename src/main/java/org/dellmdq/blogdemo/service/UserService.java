@@ -4,6 +4,7 @@ import org.dellmdq.blogdemo.entity.User;
 import org.dellmdq.blogdemo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,10 +15,12 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Transactional
     public User save(User user){
        return userRepository.save(user);
     }
 
+    @Transactional
     public List<User> saveList(List<User> userList){
         return userRepository.saveAll(userList);
     }
@@ -34,11 +37,13 @@ public class UserService {
         return userRepository.findByUserName(name);
     }
 
+    @Transactional
     public String delete(int id){
         userRepository.deleteById(id);
         return "User Id: " + id + " deleted.";
     }
 
+    @Transactional
     public String deleteSoft(int userId) {
         User userToSoftDelete = userRepository.findById(userId).orElseThrow();
         userToSoftDelete.setDeleteAt(LocalDateTime.now().toString());
@@ -47,6 +52,7 @@ public class UserService {
                 "Deleted at: " + userToSoftDelete.getDeleteAt() + ".";
     }
 
+    @Transactional
     public User updateUser(User user){
         User existingUser = userRepository.findById(user.getId()).orElseThrow(() -> new NoSuchElementException("Usuario no encontrado."));
         existingUser.setUserName(user.getUserName());
