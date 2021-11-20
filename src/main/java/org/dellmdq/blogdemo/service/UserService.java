@@ -5,7 +5,9 @@ import org.dellmdq.blogdemo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class UserService {
@@ -29,7 +31,7 @@ public class UserService {
     }
 
     public User getUserByName(String name){
-        return userRepository.findByName(name);
+        return userRepository.findByUserName(name);
     }
 
     public String delete(int id){
@@ -37,14 +39,22 @@ public class UserService {
         return "User Id: " + id + " deleted.";
     }
 
+    public String deleteSoft(int userId) {
+        User userToSoftDelete = userRepository.findById(userId).orElseThrow();
+        userToSoftDelete.setDeleteAt(LocalDateTime.now().toString());
+        userRepository.save(userToSoftDelete);
+        return "User " + userId + " soft deleted. \n" +
+                "Deleted at: " + userToSoftDelete.getDeleteAt() + ".";
+    }
+
     public User updateUser(User user){
-        User existingUser = userRepository.findById(user.getId()).orElseThrow();
-        existingUser.setName(user.getName());
+        User existingUser = userRepository.findById(user.getId()).orElseThrow(() -> new NoSuchElementException("Usuario no encontrado."));
+        existingUser.setUserName(user.getUserName());
         existingUser.setPassword(user.getPassword());
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
         existingUser.setEmail(user.getEmail());
-        existingUser.setEnabled(user.isEnabled());
+        existingUser.setVerificationCode(user.getVerificationCode());
 
         return userRepository.save(existingUser);
     }

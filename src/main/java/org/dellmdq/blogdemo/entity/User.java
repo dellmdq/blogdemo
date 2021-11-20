@@ -3,6 +3,7 @@ package org.dellmdq.blogdemo.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 
@@ -16,7 +17,7 @@ public class User {
     @Id
     @GeneratedValue
     private int id;
-    private String name;//username
+    private String userName;//username
     private String password;
     @Transient
     private String matchingPassword;
@@ -24,6 +25,7 @@ public class User {
     private String lastName;
     private String email;
     private String verificationCode;
-    private boolean enabled;
+    @Nullable
+    private String deleteAt;
 
 }
