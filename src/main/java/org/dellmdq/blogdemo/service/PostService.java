@@ -17,7 +17,7 @@ public class PostService {
     private PostRepository postRepository;
 
     public List<Post> getAll() {
-        return postRepository.findAll();
+        return postRepository.findAllByOrderByCreationDateDesc();
     }
 
     public Post getById(int postId) {
@@ -27,6 +27,19 @@ public class PostService {
     @Transactional
     public Post add(Post post) {
         return postRepository.save(post);
+    }
+
+    public Post getByTitle(String title) {
+        return postRepository.findByTitle(title);
+    }
+
+    public Post getByCategoryName(String category) {
+        return postRepository.findByCategory_Title(category);
+    }
+
+
+    public Post getByTitleAndCategoryName(String title, String category) {
+        return postRepository.findByTitleAndCategory_Title(title, category);
     }
 
 }
