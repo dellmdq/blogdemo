@@ -47,7 +47,7 @@ public class PostController {
     }
 
     @PostMapping
-    public Post add(@RequestBody Post post){
+    public ResponseEntity<?> add(@RequestBody Post post){
 //        //validar imagen del post aca
 //        if(urlValidation(post.getImage())) System.out.println(ImageValidation.urlValidation(post.getImage()));
 //        if(validateJpgPngExtension(post.getImage())) System.out.println(ImageValidation.validateJpgPngExtension(post.getImage()));
@@ -55,12 +55,12 @@ public class PostController {
 //        //if(existencia y (finaliza .jpg || . png) y notNull)
 
         if(post.getImage() != null && urlValidation(post.getImage()) && validateJpgPngExtension(post.getImage())){
-           return postService.add(post);
+           return new ResponseEntity<Post>(postService.add(post), HttpStatus.OK);
         }
         else{
             System.out.println("Image Validation Failed");
+            return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
         }
-        return null;
     }
 
     @GetMapping(params = "title")

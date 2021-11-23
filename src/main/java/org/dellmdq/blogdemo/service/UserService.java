@@ -3,6 +3,7 @@ package org.dellmdq.blogdemo.service;
 import org.dellmdq.blogdemo.entity.User;
 import org.dellmdq.blogdemo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,9 +16,18 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passEncoder;
+
     @Transactional
     public User save(User user){
-       return userRepository.save(user);
+        User userToRegister = new User();
+        userToRegister.setUserName(user.getUserName());
+        userToRegister.setPassword(passEncoder.encode(user.getPassword()));
+        userToRegister.setFirstName(user.getFirstName());;
+        userToRegister.setEmail(user.getEmail());
+        userToRegister.setVerificationCode(user.getVerificationCode());
+        return userRepository.save(user);
     }
 
     @Transactional
