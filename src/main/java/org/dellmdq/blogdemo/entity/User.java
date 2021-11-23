@@ -39,6 +39,6 @@ public class User {
     private String verificationCode;
 
     @Nullable
-    private String deleteAt;
+    private String deleteUserAt;
 
 }

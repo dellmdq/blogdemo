@@ -46,10 +46,10 @@ public class UserService {
     @Transactional
     public String deleteSoft(int userId) {
         User userToSoftDelete = userRepository.findById(userId).orElseThrow();
-        userToSoftDelete.setDeleteAt(LocalDateTime.now().toString());
+        userToSoftDelete.setDeleteUserAt(LocalDateTime.now().toString());
         userRepository.save(userToSoftDelete);
         return "User " + userId + " soft deleted. \n" +
-                "Deleted at: " + userToSoftDelete.getDeleteAt() + ".";
+                "Deleted at: " + userToSoftDelete.getDeleteUserAt() + ".";
     }
 
     @Transactional

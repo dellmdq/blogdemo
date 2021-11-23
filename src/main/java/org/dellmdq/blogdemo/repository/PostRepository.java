@@ -10,10 +10,16 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     List<Post> findAllByOrderByCreationDateDesc();
 
+    List<Post> findAllByDeleteAtOrderByCreationDateDesc(String deletedAt);
+
     Post findByTitle(String title);
 
-    Post findByCategory_Title(String category);
+    List<Post> findByCategory_Title(String category);
 
     Post findByTitleAndCategory_Title(String title, String category);
+
+    @Query(value = "SELECT p.id, p.title, p.image, c.title, p.creation_date FROM post p \n" +
+            "INNER JOIN category c ON c.id = p.category_id", nativeQuery = true)
+    List<Post> findAllBasic();
 
 }

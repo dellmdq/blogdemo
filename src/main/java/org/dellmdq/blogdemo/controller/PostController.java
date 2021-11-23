@@ -1,13 +1,12 @@
 package org.dellmdq.blogdemo.controller;
 
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.databind.ser.FilterProvider;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+
+import com.monitorjbl.json.JsonResult;
+import com.monitorjbl.json.JsonView;
+import com.monitorjbl.json.Match;
 import org.dellmdq.blogdemo.entity.Post;
 import org.dellmdq.blogdemo.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,24 +21,17 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-//    @GetMapping
-//    public List<Post> getAll(){
-//        List<Post> postList = postService.getAll();
-//        System.out.println(postList);
-//        return postList;
-//    }
+    @GetMapping
+    public List<Post> getAll(){
 
-    @GetMapping()
-    public MappingJacksonValue getAllTEST(){
-        SimpleBeanPropertyFilter simpleBeanPropertyFilter = SimpleBeanPropertyFilter.serializeAllExcept("message", "deleteAt", "user");
+        JsonResult json = JsonResult.instance();
+        List<Post> postList = postService.getAll(null);
+        String[] excludedProps = {"message","deleteAt","user"};
 
-        FilterProvider filterProvider = new SimpleFilterProvider().addFilter("postFilter", simpleBeanPropertyFilter);
-
-        List<Post> postList = postService.getAll();
-        MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(postList);
-        mappingJacksonValue.setFilters(filterProvider);
-
-        return mappingJacksonValue;
+        return json.use(JsonView.with(postList)
+                        .onClass(Post.class, Match.match()
+                                .exclude(excludedProps)))
+                .returnValue();
     }
 
     @GetMapping("/{postId}")
@@ -52,13 +44,13 @@ public class PostController {
         return postService.add(post);
     }
 
-    @GetMapping(params = "{title}")
+    @GetMapping(params = "title")
     Post getPostsByTitle(@RequestParam("title") String title){
         return postService.getByTitle(title);
     }
 
-    @GetMapping(params = "{category}")
-    public Post getPostsByCategoryName(@RequestParam("category") String category){
+    @GetMapping(params = "category")
+    public List<Post> getPostsByCategoryName(@RequestParam("category") String category){
         return postService.getByCategoryName(category);
     }
 
@@ -68,5 +60,8 @@ public class PostController {
         return postService.getByTitleAndCategoryName(title, category);
     }
 
-
+    @DeleteMapping("/{id}")
+    public Post softDelete(@PathVariable int id){
+        return postService.softDelete(id);
+    }
 }

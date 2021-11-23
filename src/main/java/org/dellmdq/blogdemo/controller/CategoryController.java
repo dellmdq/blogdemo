@@ -26,7 +26,7 @@ public class CategoryController {
     }
 
     @GetMapping("/title/{title}")
-    public Category findById(@PathVariable String title){
+    public Category findByTitle(@PathVariable String title){
         return categoryService.getCategoryByTitle(title);
     }
 

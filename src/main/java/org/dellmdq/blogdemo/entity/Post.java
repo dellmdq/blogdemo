@@ -2,6 +2,7 @@ package org.dellmdq.blogdemo.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -17,7 +18,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-@JsonFilter("postFilter")
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,9 +33,8 @@ public class Post {
     private String title;
     private String message;
     private String image;
-    private LocalDateTime creationDate = LocalDateTime.now();
+    private String creationDate = LocalDateTime.now().toString();
     private String deleteAt;
-
 
     @Nullable
     @ManyToOne
