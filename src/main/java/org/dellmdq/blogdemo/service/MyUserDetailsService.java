@@ -18,7 +18,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        org.dellmdq.blogdemo.entity.User userEntity = userRepository.findByUserName(userName);
+        org.dellmdq.blogdemo.entity.User userEntity = userRepository.findByUserNameAndDeleteUserAtIsNull(userName);
         return new User(userEntity.getUserName(),userEntity.getPassword(),new ArrayList<>());
     }
 }

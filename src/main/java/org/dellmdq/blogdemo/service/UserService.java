@@ -22,12 +22,14 @@ public class UserService {
     @Transactional
     public User save(User user){
         User userToRegister = new User();
+        userToRegister.setId(user.getId());
         userToRegister.setUserName(user.getUserName());
         userToRegister.setPassword(passEncoder.encode(user.getPassword()));
         userToRegister.setFirstName(user.getFirstName());;
+        userToRegister.setLastName(user.getLastName());
         userToRegister.setEmail(user.getEmail());
         userToRegister.setVerificationCode(user.getVerificationCode());
-        return userRepository.save(user);
+        return userRepository.save(userToRegister);
     }
 
     @Transactional
@@ -36,15 +38,15 @@ public class UserService {
     }
 
     public List<User> getAll(){
-        return userRepository.findAll();
+        return userRepository.findByDeleteUserAtIsNull();
     }
 
     public User getUserById(int id){
-        return userRepository.findById(id).orElseThrow();
+        return userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Usuario no encontrado."));
     }
 
     public User getUserByName(String name){
-        return userRepository.findByUserName(name);
+        return userRepository.findByUserNameAndDeleteUserAtIsNull(name);
     }
 
     @Transactional
@@ -75,4 +77,7 @@ public class UserService {
         return userRepository.save(existingUser);
     }
 
+    public User getUserByIdIncludeSoftDeleted(int id) {
+        return userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Usuario no encontrado."));
+    }
 }

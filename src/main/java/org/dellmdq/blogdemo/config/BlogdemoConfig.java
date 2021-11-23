@@ -47,7 +47,7 @@ public class BlogdemoConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception{
 
         http.csrf().disable()
-                .authorizeRequests().antMatchers("/users/auth").permitAll()
+                .authorizeRequests().antMatchers("/users/auth/login","/users/auth/sign_up").permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

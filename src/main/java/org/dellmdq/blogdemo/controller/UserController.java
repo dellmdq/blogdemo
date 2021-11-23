@@ -50,7 +50,7 @@ public class UserController {
         return userService.getUserByName(userName);
     }
 
-    @PostMapping
+    @PostMapping("/auth/sign_up")
     public User add(@RequestBody User user){
         return userService.save(user);
     }
@@ -79,7 +79,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400 Invalid claim object received or invalid id or id does not match object
         }
 
-        User user = userService.getUserById(id);
+        User user = userService.getUserByIdIncludeSoftDeleted(id);
 
         // Does the object exist?
         if(user == null){
@@ -104,7 +104,7 @@ public class UserController {
 
     }
 
-    @RequestMapping(value ="/auth", method = RequestMethod.POST)
+    @RequestMapping(value ="/auth/login", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody User user) throws Exception{
 
         try {
@@ -115,10 +115,12 @@ public class UserController {
             throw new Exception("Incorrect username or password", e);
         }
         final UserDetails userDetails = myUserDetailsService.loadUserByUsername(user.getUserName());
+
         final String jwt = jwtTokenUtil.generateToken(userDetails);
 
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
 
     }
+
 
 }
