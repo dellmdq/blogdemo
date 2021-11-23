@@ -9,6 +9,9 @@ import org.dellmdq.blogdemo.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import static org.dellmdq.blogdemo.util.ImageValidation.urlValidation;
+import static org.dellmdq.blogdemo.util.ImageValidation.validateJpgPngExtension;
+
 import java.util.List;
 
 
@@ -41,7 +44,19 @@ public class PostController {
 
     @PostMapping
     public Post add(@RequestBody Post post){
-        return postService.add(post);
+//        //validar imagen del post aca
+//        if(urlValidation(post.getImage())) System.out.println(ImageValidation.urlValidation(post.getImage()));
+//        if(validateJpgPngExtension(post.getImage())) System.out.println(ImageValidation.validateJpgPngExtension(post.getImage()));
+//
+//        //if(existencia y (finaliza .jpg || . png) y notNull)
+
+        if(post.getImage() != null && urlValidation(post.getImage()) && validateJpgPngExtension(post.getImage())){
+           return postService.add(post);
+        }
+        else{
+            System.out.println("Image Validation Failed");
+        }
+        return null;
     }
 
     @GetMapping(params = "title")
