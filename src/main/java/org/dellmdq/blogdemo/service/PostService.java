@@ -48,4 +48,8 @@ public class PostService {
         softDeletedPost.setDeleteAt(LocalDateTime.now().toString());
         return postRepository.save(softDeletedPost);
     }
+
+    public void save(Post post) {
+        postRepository.save(post);
+    }
 }
