@@ -122,5 +122,8 @@ public class UserController {
 
     }
 
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 
 }
